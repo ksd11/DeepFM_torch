@@ -74,21 +74,30 @@ class Deepfm(nn.Module):
         '''
             FM liner
         '''
+        # sparse_feature_number * batch_size * 1 * 1
         sparse_embedding_list1 = [self.embedding_dict1[feat](
-            X[:, self.feature_index[feat][0]:self.feature_index[feat][1]].long())
+            X[:, self.feature_index[feat][0]:self.feature_index[feat][1]].long()) 
             for feat in self.sparse_feature_columns]
 
+        # dense_feature_number * batch_size * 1
         dense_value_list2 = [X[:, self.feature_index[feat][0]:self.feature_index[feat][1]]
                              for feat in self.dense_feature_columns]
+        
+        # batch_size * 1
         linear_sparse_logit = torch.sum(
+            # batch_size  * 1 * sparse_feature_number
             torch.cat(sparse_embedding_list1, dim=-1), dim=-1, keepdim=False)
+        
+        # batch_size * 1 
         linear_dense_logit = torch.cat(
             dense_value_list2, dim=-1).matmul(self.weight)
         logit = linear_sparse_logit + linear_dense_logit
 
+        # sparse_feature_number * batch_size * 1 * 8
         sparse_embedding_list = [self.embedding_dict2[feat](
             X[:, self.feature_index[feat][0]:self.feature_index[feat][1]].long())
             for feat in self.sparse_feature_columns]
+        
         '''
             FM second
         '''

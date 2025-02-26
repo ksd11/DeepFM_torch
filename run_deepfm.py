@@ -35,7 +35,7 @@ if __name__ == "__main__":
     sparse_features = ['C' + str(i) for i in range(1, 27)]   #C代表类别特征 class
     dense_features =  ['I' + str(i) for i in range(1, 14)]   #I代表数值特征 int
     col_names = ['label'] + dense_features + sparse_features
-    data = pd.read_csv('dac/train.txt', names=col_names, sep='\t')
+    data = pd.read_csv('data/criteo_sample.txt')
     # data = pd.read_csv('criteo_train_1m.txt', names=col_names, sep='\t')
     # data = pd.read_csv('total.txt')
     feature_names = sparse_features + dense_features         #全体特征名
